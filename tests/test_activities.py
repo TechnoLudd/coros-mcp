@@ -8,7 +8,6 @@ import json
 import pytest
 from unittest.mock import patch
 from mcp.server.fastmcp import FastMCP
-from mcp.server.fastmcp.exceptions import ToolError
 
 from coros_mcp import activities
 from tests.conftest import get_tool_result_text
@@ -166,10 +165,11 @@ async def test_get_activities_summary(mock_api, app_with_activities):
 async def test_get_activities_not_logged_in(app_with_activities, mock_get_client):
     mock_get_client.side_effect = ValueError("No COROS session. Call coros_login() first.")
 
-    with pytest.raises(ToolError) as exc_info:
-        await app_with_activities.call_tool("get_activities", {})
-
-    assert "session" in str(exc_info.value).lower()
+    result = await app_with_activities.call_tool("get_activities", {})
+    text = get_tool_result_text(result)
+    data = json.loads(text)
+    assert "error" in data
+    assert "session" in data["error"].lower()
 
 
 def test_activity_tools_registered(app_with_activities):

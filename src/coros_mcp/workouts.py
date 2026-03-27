@@ -110,11 +110,9 @@ def register_tools(app):
         Returns:
             JSON with reschedule result
         """
-        client = get_client(ctx)
         try:
-            result = api_workouts.reschedule_workout(client, workout_id, new_date)
-        except ValueError as e:
-            result = {"success": False, "error": str(e)}
-        return json.dumps(result, indent=2)
+            return json.dumps(api_workouts.reschedule_workout(get_client(ctx), workout_id, new_date), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     return app

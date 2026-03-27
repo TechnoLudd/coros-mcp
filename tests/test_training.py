@@ -137,7 +137,7 @@ async def test_delete_scheduled_workout_api_error(mock_api, app_with_training):
 
     text = get_tool_result_text(result)
     data = json.loads(text)
-    assert data["success"] is False
+    assert "error" in data
     assert "illegal" in data["error"].lower()
 
 

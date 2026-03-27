@@ -34,9 +34,10 @@ def register_tools(app):
         Returns:
             JSON list of plans with id, name, weeks, workout count
         """
-        client = get_client(ctx)
-        result = api_plans.list_plans(client, status)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_plans.list_plans(get_client(ctx), status), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     @app.tool()
     async def get_training_plan(
@@ -54,9 +55,10 @@ def register_tools(app):
         Returns:
             JSON with plan details and all workouts
         """
-        client = get_client(ctx)
-        result = api_plans.get_plan(client, plan_id)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_plans.get_plan(get_client(ctx), plan_id), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     @app.tool()
     async def create_training_plan(

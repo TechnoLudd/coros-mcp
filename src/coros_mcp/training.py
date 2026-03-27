@@ -39,9 +39,10 @@ def register_tools(app):
         Returns:
             JSON with training schedule data
         """
-        client = get_client(ctx)
-        result = api_calendar.get_calendar(client, start_date, end_date)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_calendar.get_calendar(get_client(ctx), start_date, end_date), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     @app.tool()
     async def get_plan_adherence(
@@ -62,9 +63,10 @@ def register_tools(app):
         Returns:
             JSON with plan adherence data
         """
-        client = get_client(ctx)
-        result = api_calendar.get_adherence(client, start_date, end_date)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_calendar.get_adherence(get_client(ctx), start_date, end_date), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     @app.tool()
     async def delete_scheduled_workout(
@@ -84,12 +86,9 @@ def register_tools(app):
         Returns:
             JSON with deletion result
         """
-        client = get_client(ctx)
         try:
-            result = api_workouts.delete_workout(client, workout_id, date)
-        except ValueError as e:
-            logger.error(f"delete_scheduled_workout failed: {e}")
-            result = {"success": False, "error": str(e)}
-        return json.dumps(result, indent=2)
+            return json.dumps(api_workouts.delete_workout(get_client(ctx), workout_id, date), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     return app

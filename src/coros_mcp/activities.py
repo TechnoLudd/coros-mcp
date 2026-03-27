@@ -38,9 +38,10 @@ def register_tools(app):
         Returns:
             JSON with activity list and pagination info
         """
-        client = get_client(ctx)
-        result = api_activities.get_activities(client, start_date, end_date, page, size)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_activities.get_activities(get_client(ctx), start_date, end_date, page, size), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     @app.tool()
     async def get_activity_details(activity_id: str, ctx: Context) -> str:
@@ -59,9 +60,10 @@ def register_tools(app):
         Returns:
             JSON with detailed activity data
         """
-        client = get_client(ctx)
-        result = api_activities.get_activity_detail(client, activity_id)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_activities.get_activity_detail(get_client(ctx), activity_id), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     @app.tool()
     async def get_activity_download_url(
@@ -82,9 +84,10 @@ def register_tools(app):
         Returns:
             JSON with the download URL
         """
-        client = get_client(ctx)
-        result = api_activities.get_download_url(client, activity_id, format=file_format)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_activities.get_download_url(get_client(ctx), activity_id, format=file_format), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     @app.tool()
     async def get_activities_summary(
@@ -103,8 +106,9 @@ def register_tools(app):
         Returns:
             JSON with activity summary statistics
         """
-        client = get_client(ctx)
-        result = api_activities.get_activities_summary(client, days)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_activities.get_activities_summary(get_client(ctx), days), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     return app

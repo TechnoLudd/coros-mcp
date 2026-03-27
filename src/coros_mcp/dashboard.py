@@ -30,9 +30,10 @@ def register_tools(app):
         Returns:
             JSON with fitness summary data
         """
-        client = get_client(ctx)
-        result = api_status.get_fitness_status(client)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_status.get_fitness_status(get_client(ctx)), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     @app.tool()
     async def get_race_predictions(ctx: Context) -> str:
@@ -45,9 +46,10 @@ def register_tools(app):
         Returns:
             JSON with predicted race times and paces
         """
-        client = get_client(ctx)
-        result = api_status.get_race_predictions(client)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_status.get_race_predictions(get_client(ctx)), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     @app.tool()
     async def get_hrv_trend(ctx: Context) -> str:
@@ -60,9 +62,10 @@ def register_tools(app):
         Returns:
             JSON with HRV trend data
         """
-        client = get_client(ctx)
-        result = api_status.get_hrv_trend(client)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_status.get_hrv_trend(get_client(ctx)), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     @app.tool()
     async def get_personal_records(ctx: Context) -> str:
@@ -75,8 +78,9 @@ def register_tools(app):
         Returns:
             JSON with personal records grouped by period
         """
-        client = get_client(ctx)
-        result = api_status.get_personal_records(client)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_status.get_personal_records(get_client(ctx)), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     return app

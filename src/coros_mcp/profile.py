@@ -27,8 +27,9 @@ def register_tools(app):
         Returns:
             JSON with athlete profile and training zones
         """
-        client = get_client(ctx)
-        result = api_profile.get_athlete_profile(client)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_profile.get_athlete_profile(get_client(ctx)), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     return app

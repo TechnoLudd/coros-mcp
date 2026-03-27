@@ -29,9 +29,10 @@ def register_tools(app):
         Returns:
             JSON with training load analysis data
         """
-        client = get_client(ctx)
-        result = api_status.get_training_load(client)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_status.get_training_load(get_client(ctx)), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     @app.tool()
     async def get_sport_statistics(ctx: Context) -> str:
@@ -46,8 +47,9 @@ def register_tools(app):
         Returns:
             JSON with sport statistics and intensity distribution
         """
-        client = get_client(ctx)
-        result = api_status.get_sport_stats(client)
-        return json.dumps(result, indent=2)
+        try:
+            return json.dumps(api_status.get_sport_stats(get_client(ctx)), indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
 
     return app
